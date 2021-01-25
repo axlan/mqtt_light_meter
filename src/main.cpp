@@ -64,7 +64,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
+    Serial.print("Attempting MQTT connection...1");
     // Create a random client ID
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
@@ -103,6 +103,8 @@ void loop() {
   }
   client.loop();
 
+
+/*
   bool waited = false;
   while (!lightMeterA.measurementReady(false)) {
     waited = true;
@@ -110,10 +112,13 @@ void loop() {
   if (!waited) {
     Serial.println("!");
   }
-
-  // if (!lightMeterA.measurementReady(false)) {
-  //   return;
-  // }
+  */
+ 
+  unsigned long now = millis();
+  if (now - lastMsg < 17) {
+    return;
+  }
+  lastMsg = now;
 
   if (value == 0) {
     //Serial.println("b");

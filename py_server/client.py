@@ -1,4 +1,6 @@
 import paho.mqtt.client as mqtt
+from playsound import playsound
+import struct
 
 fd = open('data.bin' ,'wb')
 
@@ -13,8 +15,13 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
+    size = int(len(msg.payload) / 2)
+    data = struct.unpack(f'{size}h', msg.payload)
     # print(msg.topic+" "+str(msg.payload))
-    print(msg.topic)
+    low = min(data)
+    print(low, max(data))
+    if (low < 83):
+        playsound('beep-09.mp3')
     fd.write(msg.payload)
 
 client = mqtt.Client()
